@@ -1,0 +1,25 @@
+# Maven
+Parser/target/
+
+# NetBeans specific
+Parser/nbproject/private/
+Parser/build/
+Parser/nbbuild/
+Parser/dist/
+Parser/nbdist/
+Parser/nbactions.xml
+Parser/nb-configuration.xml
+
+# Binaries
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.war
+*.ear
+*.sar
+*.class
