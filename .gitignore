@@ -1,14 +1,14 @@
 # Maven
-Parser/target/
+/target/
 
 # NetBeans specific
-Parser/nbproject/private/
-Parser/build/
-Parser/nbbuild/
-Parser/dist/
-Parser/nbdist/
-Parser/nbactions.xml
-Parser/nb-configuration.xml
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/nbactions.xml
+/nb-configuration.xml
 
 # Binaries
 *.7z
