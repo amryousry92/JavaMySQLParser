@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ef.database;
+package com.database;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -68,7 +68,7 @@ public class LogEntry {
 
     public void setDateString(String dateString) throws ParseException {
 //        yyyy-MM-dd HH:mm:ss.SSS
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date date = sdf.parse(dateString);
         this.date = date.getTime();
     }
@@ -76,7 +76,7 @@ public class LogEntry {
     public String getDateString() {
 
         Date date = new Date(this.date);
-        DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         format.setTimeZone(TimeZone.getTimeZone("Cest/UTC"));
         String formatted = format.format(date);
         return formatted;
