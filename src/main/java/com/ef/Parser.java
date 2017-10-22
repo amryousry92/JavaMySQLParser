@@ -28,7 +28,7 @@ public class Parser {
     private final static Configurations configurations = Configurations.getInstance("config.properties");
 
 //    private static
-    private static void readFile(String fileName) throws Exception {
+    private static List<LogEntry> readFile(String fileName) throws Exception {
         List<LogEntry> logEntries = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
@@ -46,10 +46,10 @@ public class Parser {
                     Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, e);
                 }
             });
-            jdbcObject.addDataToDB(logEntries);
         } catch (IOException e) {
             Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, e);
         }
+        return logEntries;
     }
 
     private static void initializeConnection() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -59,14 +59,13 @@ public class Parser {
     private static String constructQueryMissingStatements(String startDate, String duration, String threshold) throws ParseException {
         long epochDate = getDateEpoch(startDate);
         long endDate = ("hourly".equals(duration)) ? epochDate + 3600000l : epochDate + 86400000l;
-        String statement = " WHERE date>=" + epochDate + " AND date<=" + endDate;
+        String statement = " WHERE arrival_date>=" + epochDate + " AND arrival_date<=" + endDate;
         statement += " GROUP BY ip";
         statement += " HAVING COUNT(*)>=" + Integer.parseInt(threshold);
         return statement;
     }
 
     private static long getDateEpoch(String dateString) throws ParseException {
-//        yyyy-MM-dd HH:mm:ss.SSS
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd.HH:mm:ss");
         Date date = sdf.parse(dateString);
         return date.getTime();
@@ -86,18 +85,15 @@ public class Parser {
     public static void main(String[] args) {
         try {
             initializeConnection();
-//            String startDate = "2017-01-01.13:00:00";
-//            String duration = "hourly";
-//            String threshold = "200";
-//            String fileName = configurations.getProperty("log.file.path");
             String startDate = getPropValue("startDate");
             String duration = getPropValue("duration");
             String threshold = getPropValue("threshold");
             String fileName = getPropValue("accesslog");
-            readFile(fileName);//reads log file and loads it into table logs
+            List<LogEntry> logEntries = readFile(fileName);
+            jdbcObject.addDataToDB(logEntries);
             String whereStatement = constructQueryMissingStatements(startDate, duration, threshold);
-            List<LogEntry> logsEntries = jdbcObject.getDataFromDB(whereStatement);
-            printIps(logsEntries);
+            List<LogEntry> RequestedLogEntries = jdbcObject.getDataFromDB(whereStatement);
+            printIps(RequestedLogEntries);
         } catch (Exception ex) {
             Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, ex);
         }

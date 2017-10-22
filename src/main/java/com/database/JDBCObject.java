@@ -44,7 +44,7 @@ public class JDBCObject {
         String query = "";
         for (LogEntry entry : entries) {
             query = insertQueryStatement + "(";
-            query += entry.getDate() + ",";
+            query += entry.getArrival_date() + ",";
             query += "'" + entry.getIp() + "',";
             query += "'" + entry.getRequest() + "',";
             query += "'" + entry.getStatus() + "',";
@@ -67,18 +67,17 @@ public class JDBCObject {
         ResultSet rs = prepareStat.executeQuery();
         while (rs.next()) {
             LogEntry dbEntry = new LogEntry();
-            dbEntry.setDate(rs.getLong("date"));
+            dbEntry.setArrival_date(rs.getLong("arrival_date"));
             dbEntry.setIp(rs.getString("ip"));
             dbEntry.setRequest(rs.getString("request"));
             dbEntry.setStatus(rs.getString("status"));
             dbEntry.setAgent(rs.getString("agent"));
             outputList.add(dbEntry);
             query = insertQueryStatement;
-            query += "'"+ dbEntry.getIp() +"', 'Unreachable')";
+            query += "'"+ dbEntry.getIp() +"', 'IP Unreachable')";
             statement.addBatch(query);
         }
         statement.executeBatch();
-
         return outputList;
     }
 

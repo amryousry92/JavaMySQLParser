@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.database;
 
 import java.text.DateFormat;
@@ -17,7 +12,8 @@ import java.util.TimeZone;
  */
 public class LogEntry {
 
-    private long date;
+    private long arrival_date;
+
     private String ip;
     private String request;
     private String status;
@@ -26,13 +22,13 @@ public class LogEntry {
     public LogEntry(){
     }
     
-    public long getDate() {
-        return date;
+    public long getArrival_date() {
+        return arrival_date;
     }
 
-    public void setDate(long date) {
-        this.date = date;
-    }
+    public void setArrival_date(long arrival_date) {
+        this.arrival_date = arrival_date;
+    }    
 
     public String getIp() {
         return ip;
@@ -67,18 +63,17 @@ public class LogEntry {
     }
 
     public void setDateString(String dateString) throws ParseException {
-//        yyyy-MM-dd HH:mm:ss.SSS
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        Date date = sdf.parse(dateString);
-        this.date = date.getTime();
+        Date formattedDate = sdf.parse(dateString);
+        this.arrival_date = formattedDate.getTime();
     }
 
     public String getDateString() {
 
-        Date date = new Date(this.date);
+        Date epochDate = new Date(this.arrival_date);
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         format.setTimeZone(TimeZone.getTimeZone("Cest/UTC"));
-        String formatted = format.format(date);
+        String formatted = format.format(epochDate);
         return formatted;
     }
 }
