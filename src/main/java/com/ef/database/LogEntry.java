@@ -15,7 +15,7 @@ import java.util.TimeZone;
  *
  * @author Amr
  */
-public class DBEntry {
+public class LogEntry {
 
     private long date;
     private String ip;
@@ -23,6 +23,9 @@ public class DBEntry {
     private String status;
     private String agent;
 
+    public LogEntry(){
+    }
+    
     public long getDate() {
         return date;
     }
