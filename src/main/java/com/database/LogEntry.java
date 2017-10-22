@@ -77,7 +77,6 @@ public class LogEntry implements Serializable {
     }
 
     public void setDateString(String dateString) throws ParseException {
-//        yyyy-MM-dd HH:mm:ss.SSS
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date date = sdf.parse(dateString);
         this.arrival_date = date.getTime();

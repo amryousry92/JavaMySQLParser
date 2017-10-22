@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 public interface LogEntryRepository extends JpaRepository<LogEntry, Long> {
 
     void save(List<LogEntry> entries);
-//" WHERE date>=" + epochDate + " AND date<=" + endDate
     
     @Query("select ip from logs where arrival_date>=(:startDate) AND arrival_Date<=(:endDate) GROUP BY ip HAVING COUNT(*)>=(:threshold)")
     public List<String> findIpsByDate(@Param("startDate") long startDate,

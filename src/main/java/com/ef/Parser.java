@@ -51,29 +51,11 @@ public class Parser {
         return logEntries;
     }
 
-//    private static void initializeConnection() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-//        jdbcObject.makeJDBCConnection();
-//    }
-//    private static String constructQueryMissingStatements(String startDate, String duration, String threshold) throws ParseException {
-//        long epochDate = getDateEpoch(startDate);
-//        long endDate = ("hourly".equals(duration)) ? epochDate + 3600000l : epochDate + 86400000l;
-//        String statement = " WHERE date>=" + epochDate + " AND date<=" + endDate;
-//        statement += " GROUP BY ip";
-//        statement += " HAVING COUNT(*)>=" + Integer.parseInt(threshold);
-//        return statement;
-//    }
     private static long getDateEpoch(String dateString) throws ParseException {
-//        yyyy-MM-dd HH:mm:ss.SSS
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd.HH:mm:ss");
         Date date = sdf.parse(dateString);
         return date.getTime();
     }
-
-//    private static void printIps(List<LogEntry> logsEntries) {
-//        logsEntries.forEach((logEntry) -> {
-//            System.out.println(logEntry.getIp());
-//        });
-//    }
     public static String getPropValue(String key) {
         String args = System.getProperty("sun.java.command");
         return args.split(key + "=")[1].split(" ")[0];
@@ -81,22 +63,15 @@ public class Parser {
 
     public static void main(String[] args) {
         try {
-//            initializeConnection();
             String startDate = "2017-01-01.13:00:00";
             String duration = "hourly";
             String threshold = "200";
             String fileName = configurations.getProperty("log.file.path");
-//            String startDate = getPropValue("startDate");
-//            String duration = getPropValue("duration");
-//            String threshold = getPropValue("threshold");
-//            String fileName = getPropValue("accesslog");
             long startEpochDate = getDateEpoch(startDate);
             long endDate = ("hourly".equals(duration)) ? startEpochDate + 3600000l : startEpochDate + 86400000l;
             List<LogEntry> logEntries = readFile(fileName);//reads log file and loads it into table logs
             jdbcObject.addDataToDB(logEntries);
-//            String whereStatement = constructQueryMissingStatements(startDate, duration, threshold);
             List<String> logEntriesIps = jdbcObject.getDataFromDB(startEpochDate, endDate, Integer.parseInt(threshold));
-//            printIps(logsEntries);
             jdbcObject.saveToErrorLog(logEntriesIps);
             System.out.println(logEntriesIps);
         } catch (Exception ex) {
