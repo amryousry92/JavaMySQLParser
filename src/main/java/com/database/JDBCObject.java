@@ -10,11 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author .com Simple Hello World MySQL Tutorial on how to make JDBC
- * connection, Add and Retrieve Data by App Shah
- *
- */
 public class JDBCObject {
 
     static Connection conn;
@@ -26,6 +21,7 @@ public class JDBCObject {
         this.prepareStat = null;
         this.conn = null;
     }
+// initializes connection with database
 
     public void makeJDBCConnection() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         String databaseUrl = props.getProperty("mysql.server.url");
@@ -36,6 +32,7 @@ public class JDBCObject {
         Class.forName("com.mysql.jdbc.Driver").newInstance();
         conn = DriverManager.getConnection(databaseUrl + ":" + databasePort + "/" + database, username, password);
     }
+// adding data to logs table
 
     public void addDataToDB(List<LogEntry> entries) throws SQLException {
 
@@ -53,6 +50,7 @@ public class JDBCObject {
         }
         statement.executeBatch();
     }
+// getting ips from logs table
 
     public List<LogEntry> getDataFromDB(String remainingQueryStatement) throws SQLException {
 
@@ -74,7 +72,7 @@ public class JDBCObject {
             dbEntry.setAgent(rs.getString("agent"));
             outputList.add(dbEntry);
             query = insertQueryStatement;
-            query += "'"+ dbEntry.getIp() +"', 'IP Unreachable')";
+            query += "'" + dbEntry.getIp() + "', 'IP Unreachable')";
             statement.addBatch(query);
         }
         statement.executeBatch();

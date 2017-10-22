@@ -27,7 +27,7 @@ public class Parser {
     static JDBCObject jdbcObject = new JDBCObject();
     private final static Configurations configurations = Configurations.getInstance("config.properties");
 
-//    private static
+//  reads file and pushes it into LogEntry objects list
     private static List<LogEntry> readFile(String fileName) throws Exception {
         List<LogEntry> logEntries = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
@@ -51,11 +51,11 @@ public class Parser {
         }
         return logEntries;
     }
-
+// initialize connection with database
     private static void initializeConnection() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         jdbcObject.makeJDBCConnection();
     }
-
+// constructs the where, having and group by statements 
     private static String constructQueryMissingStatements(String startDate, String duration, String threshold) throws ParseException {
         long epochDate = getDateEpoch(startDate);
         long endDate = ("hourly".equals(duration)) ? epochDate + 3600000l : epochDate + 86400000l;
@@ -64,19 +64,19 @@ public class Parser {
         statement += " HAVING COUNT(*)>=" + Integer.parseInt(threshold);
         return statement;
     }
-
+// converts date from string to epoch
     private static long getDateEpoch(String dateString) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd.HH:mm:ss");
         Date date = sdf.parse(dateString);
         return date.getTime();
     }
-
+// lists all ips from object list
     private static void printIps(List<LogEntry> logsEntries) {
         logsEntries.forEach((logEntry) -> {
             System.out.println(logEntry.getIp());
         });
     }
-
+// gets argument from user
     public static String getPropValue(String key) {
         String args = System.getProperty("sun.java.command");
         return args.split(key + "=")[1].split(" ")[0];
